@@ -22,7 +22,65 @@ or add
 to the `require` section of your `composer.json` file.
 
 ## Configuration
+### Active Record model
+Add behavior to you AR model and make sure it has an `i18n` attribute:
+```php
+public function behaviors(): array
+{
+    return [
+        \JCIT\i18n\behaviors\I18nBehavior::class => [
+            'class' => \JCIT\i18n\behaviors\I18nBehavior::class,
+            'attributes' => [
+                '<attribute>',
+            ],       
+        ]       
+    ]; 
+}
+```
 
+In the rules, just define the rules as you would normally do:
+```php
+public function rules(): array
+{
+    return [
+        [['<attribute>'], \yii\validators\RequiredValidator::class],
+        [['<attribute>'], \yii\validators\StringValidator::class],
+    ]; 
+}
+```
+
+In order to set properties or save it first set the locale and then save:
+```php
+$model = new ClassWithI18nBehavior();
+$model->locale = 'en-US';
+$model-><attribute> = 'value en';
+$model->save();
+
+$model->locale = 'nl-NL';
+$model-><attribute> = 'value nl';
+$model->save();
+```
+
+Fetching values is done automatically to the locale set to the model:
+```php
+$model = ClassWithI18nBehavior::findOne();
+$model->locale = 'en-US';
+echo $model-><attribute>; // 'value en'
+
+$model->locale = 'nl-NL';
+echo $model-><attribute>; // 'value nl'
+```
+
+### Form model
+Add the trait to the form model:
+```php
+class FormModel extends \yii\base\Model
+{
+    use \JCIT\i18n\traits\models\I18nTrait;
+}
+```
+
+On rendering the form attributes, the attribute name should be like: `i18n[<locale>][<attribute>]`.
 
 ## TODO
 - Fix PHPStan, re-add to `captainhook.json`
