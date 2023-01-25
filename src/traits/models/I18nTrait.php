@@ -11,7 +11,7 @@ use yii\validators\Validator;
 
 trait I18nTrait
 {
-    public array $i18n = [];
+    public array|null $i18n = null;
 
     public function __get($name): mixed
     {
