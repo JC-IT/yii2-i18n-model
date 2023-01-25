@@ -17,7 +17,7 @@ class I18nBehavior extends Behavior
     public function __get($name): mixed
     {
         if (in_array($name, $this->attributes)) {
-            return $this->owner->{$this->translationAttribute}[$this->locale][$name] ?? [];
+            return $this->owner->{$this->translationAttribute}[$this->locale][$name] ?? null;
         }
 
         return parent::__get($name);
