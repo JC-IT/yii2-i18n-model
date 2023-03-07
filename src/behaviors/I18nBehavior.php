@@ -57,4 +57,9 @@ class I18nBehavior extends Behavior
     {
         return in_array($name, $this->attributes) || parent::canSetProperty($name, $checkVars);
     }
+
+    public function getAvailableLanguages(): array
+    {
+        return array_keys(array_filter(array_map('array_filter', $this->owner->{$this->translationAttribute})));
+    }
 }
